@@ -31,7 +31,7 @@
  * SUCH DAMAGE.
  */
 
-/* 1999-02-22 Arkadiusz Mi¶kiewicz <misiek@misiek.eu.org>
+/* 1999-02-22 Arkadiusz Miï¿½kiewicz <misiek@misiek.eu.org>
  * - added Native Language Support
  */
 
@@ -54,7 +54,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
+#ifdef MACOS_M1
+// for macOS
+#include <signal.h>
+#endif
 #if defined(SVR4)
 #include <fcntl.h>
 #include <stropts.h>
@@ -71,7 +74,12 @@
 #define _(FOO) FOO
 
 #ifdef HAVE_openpty
+#ifdef MACOS_M1
+// for macOS
+#include <util.h>
+#else
 #include <libutil.h>
+#endif
 #endif
 
 #if defined(SVR4) && !defined(CDEL)
@@ -414,11 +422,12 @@ getmaster()
 			*pty = *cp;
 			master = open(line, O_RDWR);
 			if (master >= 0) {
+				fprintf(stderr, line);
 				char *tp = &line[strlen("/dev/")];
 				int ok;
 
 				/* verify slave side is usable */
-				*tp = 't';
+				*tp = 't';	
 				ok = access(line, R_OK|W_OK) == 0;
 				*tp = 'p';
 				if (ok) {

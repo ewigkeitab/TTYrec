@@ -16,7 +16,9 @@ or if your system supports ```getpt(3)```
 
 ```HAVE_getpt``` is required if your Linux system uses ```devfs```.
 
-
+add macOS M1 support
+  ```make  CFLAGS="-DHAVE_openpty -DMACOSM1" all ```
+  
 ## Usage:
 
    ```ttyrec```

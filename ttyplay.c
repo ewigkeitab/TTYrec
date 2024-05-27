@@ -267,8 +267,13 @@ main (int argc, char **argv)
     ProcessFunc process = ttyplayback;
     FILE *input = NULL;
     struct termios old, new;
-
+ #ifdef MACOS_M1   
+    // for macOS
+    // change function name to setprogname
+    setprogname(argv[0]);
+#else
     set_progname(argv[0]);
+#endif
     while (1) {
         int ch = getopt(argc, argv, "s:np");
         if (ch == EOF) {

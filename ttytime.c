@@ -61,7 +61,12 @@ int
 main (int argc, char **argv)
 {
     int i;
-    set_progname(argv[0]);
+    #ifdef MACOS_M1
+        // for macOS
+        setprogname(argv[0]);
+    #else
+        set_progname(argv[0]);
+    #endif
     for (i = 1; i < argc; i++) {
 	char *filename = argv[i];
 	printf("%7d	%s\n", calc_time(filename), filename);
